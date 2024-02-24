@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import { io } from "socket.io-client";
+import "./index.css";
 
 function App() {
   const socket = io("http://localhost:3000/");
@@ -26,8 +26,8 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <p>App run </p>
+    <div className="bg-red-300">
+      <h1 className="text-pink-500">Welcome to Socket webflow </h1>
     </div>
   );
 }
