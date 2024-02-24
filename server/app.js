@@ -27,24 +27,32 @@ const io = new Server(server, {
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true,
   })
 );
 
+// middlware for cookies
+app.use(cors());
+
 app.get("/", (req, res) => {
   res.send("Hello, This is Socket app!");
 });
 
+// craetes socket at backend
+
 io.on("connection", (socket) => {
   console.log("Socket User Credentials ");
-  console.log("Socket id", socket.id);
+  console.log(socket, "Socket id", socket.id);
 });
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// not app.listen : due to craete another http instance   
 
 // app.get("/login", (req, res) => {
 //   const token = jwt.sign({ _id: "asdasjdhkasdasdas" }, secretKeyJWT);
