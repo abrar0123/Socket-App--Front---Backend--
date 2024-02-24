@@ -88,9 +88,11 @@ function App() {
           Socket Chat Received
         </h1>
         <div>
-          <p>your megs: </p>
-
-          <p>{receivedmsg}</p>
+          <h1 className="font-semibold text-xl text-purple-700">New Chat </h1>
+          {/* <p>{receivedmsg}</p> */}
+          {receivedmsg.map((item) => {
+            return <p>{item}</p>;
+          })}
           <div
             onClick={msgSendHandler}
             className=" bg-green-500 text-xl text-white py-3 pl-4 shadow-md rounded-sm cursor-pointer border-2  active:border-none font-semibold mt-4"

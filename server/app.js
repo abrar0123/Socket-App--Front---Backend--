@@ -61,10 +61,14 @@ io.on("connection", (socket) => {
   //   socket.broadcast.emit("chat", e);
   // });
 
+  // ********* event 5 : send p1 to p2 msg  *********
+
   socket.on("send2", ({ room, msg }) => {
     // console.log("send2 data : ", room);
-    io.to(room).emit("msgRec", msg);
+    // io.to(room).emit("msgRec", msg); // both same
+    socket.to(room).emit("msgRec", msg);
   });
+  
 
   // ********* event 4 : by default event for disconnect connectio *********
   socket.on("disconnect", () => {
