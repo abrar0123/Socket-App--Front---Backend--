@@ -58,8 +58,11 @@ io.on("connection", (socket) => {
 
   // ********* event 3 : receive msg to any  user *********
   socket.on("send", (e) => {
-    console.log("chat : ", e);
     socket.broadcast.emit("chat", e);
+  });
+
+  socket.on("send2", ({ room, message }) => {
+    io.to(room).emit("message-received", message);
   });
 
   // ********* event 4 : by default event for disconnect connectio *********

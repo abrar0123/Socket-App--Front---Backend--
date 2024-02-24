@@ -5,9 +5,9 @@ import "./index.css";
 function App() {
   const socket = io("http://localhost:3000/");
   const [msg, setmsg] = useState("");
-  const [receivedmsg, setreceivedmsg] = useState("");
+  const [receivedmsg, setreceivedmsg] = useState([]);
 
-  console.log("receivedmsg", receivedmsg);
+  console.log("chat : msgrec ", receivedmsg);
   useEffect(() => {
     socket.on("connect", () => {
       console.log("socket01 : connected run  ", socket.id);
@@ -26,14 +26,15 @@ function App() {
     // return () => {
     //   // socket.disconnect();
     // };
-    socket.on("chat", (e) => {
-      console.log("chat : ", e);
-      setreceivedmsg(e);
+    socket.on("chat", (msg) => {
+      // console.log("chat : ", msg);
+      setreceivedmsg((prev) => [...prev, msg]);
     });
   }, []);
 
   const msgSendHandler = () => {
-    socket.emit("send", `user : ${msg}`);
+    socket.emit("send", `${msg}`);
+    setmsg("");
   };
 
   return (
