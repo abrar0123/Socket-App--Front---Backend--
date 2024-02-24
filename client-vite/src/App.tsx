@@ -17,9 +17,9 @@ function App() {
     socket.on("welcome1", (s) => {
       console.log("socket02 bradcast : ", s);
     });
-
+    socket.emit("message", "socket abrar");
     // when this component should removed, that function call
-    
+
     return () => {
       socket.disconnect();
     };
