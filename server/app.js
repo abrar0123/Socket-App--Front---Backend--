@@ -43,16 +43,25 @@ app.get("/", (req, res) => {
 
 // craetes socket at backend
 
+// after connect , 1st emit (send msg )
 io.on("connection", (socket) => {
-  console.log("Socket User Credentials ");
-  console.log(socket, "Socket id", socket.id);
+  console.log("Socket User connected ", socket.id);
+
+  socket.emit("welcome", `server socket msg at ID , ${socket.id}`); // send msg to all 1
+  socket.broadcast.emit(
+    "welcome1",
+    `server socket broadcast at ID , ${socket.id}`
+  ); // send broadcast msg 2
+  socket.on("disconnect", () => {
+    console.log("user disconnected ", socket.id);
+  });
 });
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// not app.listen : due to craete another http instance   
+// not app.listen : due to craete another http instance
 
 // app.get("/login", (req, res) => {
 //   const token = jwt.sign({ _id: "asdasjdhkasdasdas" }, secretKeyJWT);

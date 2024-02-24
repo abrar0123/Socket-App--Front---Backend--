@@ -6,10 +6,23 @@ function App() {
   const socket = io("http://localhost:3000/");
 
   useEffect(() => {
-    console.log("socket : connect");
     socket.on("connect", () => {
-      console.log("socket : run 123 ");
+      console.log("socket01 : connected run  ", socket.id);
     });
+
+    // events name must be same at backend
+    socket.on("welcome", (s) => {
+      console.log("socket02 : ", s);
+    });
+    socket.on("welcome1", (s) => {
+      console.log("socket02 bradcast : ", s);
+    });
+
+    // when this component should removed, that function call
+    
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (
