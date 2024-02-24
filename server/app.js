@@ -45,11 +45,11 @@ app.get("/", (req, res) => {
 
 // after connect , 1st emit (send msg )
 io.on("connection", (socket) => {
-  console.log("Socket User connected ", socket.id);
+  // console.log("Socket User connected ", socket.id);
 
   // ********* event 1 : send msg to all user *********
   socket.emit("welcome", `server socket msg at ID , ${socket.id}`);
-  
+
   // ********* event 2 : send msg to all user excpt current user *********
   socket.broadcast.emit(
     "welcome1",
@@ -57,15 +57,15 @@ io.on("connection", (socket) => {
   );
 
   // ********* event 3 : receive msg to any  user *********
-  socket.on("message", (e) => {
-    console.log("message received : ", e);
-  });
-  
-  // ********* event 4 : by default event for disconnect connectio *********
-  socket.on("disconnect", () => {
-    console.log("user disconnected ", socket.id);
+  socket.on("send", (e) => {
+    console.log("chat : ", e);
+    socket.broadcast.emit("chat", e);
   });
 
+  // ********* event 4 : by default event for disconnect connectio *********
+  socket.on("disconnect", () => {
+    // console.log("user disconnected ", socket.id);
+  });
 });
 
 server.listen(port, () => {
