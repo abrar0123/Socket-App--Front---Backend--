@@ -1,3 +1,4 @@
 import Home from './Home/Home';
-import Chat from './Chat/Chat';
-export { Home, Chat };
+import ChatPage from './Chat/Chat';
+import ServicesPage from './Services/Services';
+export { Home, ChatPage, ServicesPage };

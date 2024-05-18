@@ -1,7 +1,7 @@
 const SectinP = () => {
   return (
     <>
-      <main className="flex-grow container mx-auto px-6  py-16 flex gap-40  items-center">
+      <main className="flex-grow container mx-auto px-6 py-16 flex gap-20 items-center">
         <div className="w-full lg:w-1/2">
           <h1 className="text-3xl lg:text-5xl font-bold leading-tight mb-4">
             Welcome to Our Service
