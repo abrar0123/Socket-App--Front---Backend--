@@ -1,37 +1,60 @@
 // src/pages/ChatPage.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 import { LandingPage } from '../../components';
+import { io } from 'socket.io-client';
 
 const users = [
   {
     id: 1,
-    name: 'John Doe',
+    name: 'Abrar Test',
     avatar: 'https://via.placeholder.com/150',
     online: true,
+    uid: '',
   },
   {
     id: 2,
     name: 'Jane Smith',
     avatar: 'https://via.placeholder.com/150',
     online: false,
+    uid: '',
   },
   {
     id: 3,
     name: 'Bob Johnson',
     avatar: 'https://via.placeholder.com/150',
     online: true,
+    uid: '',
   },
   {
     id: 4,
     name: 'Alice Williams',
     avatar: 'https://via.placeholder.com/150',
     online: true,
+    uid: '',
   },
 ];
 
 const messages = [
   { id: 1, userId: 1, text: 'Hello, how are you?', timestamp: '10:00 AM' },
+  {
+    id: 2,
+    userId: 2,
+    text: 'I am good, thank you! How about you?',
+    timestamp: '10:01 AM',
+  },
+  {
+    id: 2,
+    userId: 2,
+    text: 'I am good, thank you! How about you?',
+    timestamp: '10:01 AM',
+  },
+  {
+    id: 2,
+    userId: 2,
+    text: 'I am good, thank you! How about you?',
+    timestamp: '10:01 AM',
+  },
   {
     id: 2,
     userId: 2,
@@ -47,27 +70,59 @@ const messages = [
 ];
 
 const ChatDetails = () => {
-  const [currentUser, setCurrentUser] = useState(users[0]);
-  const [chatMessages, setChatMessages] = useState(messages);
+  const [currentUser, setCurrentUser] = useState(users[1]);
+  const [selected, setSelected] = useState([]);
+  const socket = useMemo(() => io('http://localhost:3000/'), []);
+  const [msg, setmsg] = useState('');
+  const [receivedmsg, setreceivedmsg] = useState([]);
+  const [socketId, setsocketId] = useState(null);
+  const [roomId, setRoomId] = useState('');
+
+  const [chatMessages, setChatMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
 
+  // ************ Funtion 1 *************
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() !== '') {
-      const newChatMessage = {
-        id: chatMessages.length + 1,
-        userId: currentUser.id,
-        text: newMessage,
-        timestamp: new Date().toLocaleTimeString(),
-      };
-      setChatMessages([...chatMessages, newChatMessage]);
-      setNewMessage('');
-    }
+  // ************ Funtion 2 *************
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('Connection : Build   ', socket.id);
+      setsocketId(socket.id);
+    });
+
+    socket.on('chat', (msg) => {
+      console.log('Backend msgRec Listener : ', msg);
+
+      setChatMessages((prev) => [...prev, msg]);
+    });
+    socket.on('msgRec', (msg) => {
+      console.log('Backend msgRec Listener 1 : ', msg);
+
+      setChatMessages((prev) => [...prev, msg]);
+    });
+  }, []);
+
+  const sendEvent = () => {
+    const newChatMessage = {
+      id: chatMessages.length + 1,
+      userId: currentUser.id,
+      text: newMessage,
+      timestamp: new Date().toLocaleTimeString(),
+      self: false,
+    };
+    const data = { room: roomId, msg: newChatMessage };
+    socket.emit('send2', data);
+
+    setmsg('');
+
+    setChatMessages([...chatMessages, { ...newChatMessage, self: true }]);
+    setNewMessage('');
   };
+  console.log('chatMessages', chatMessages);
 
   return (
     <LandingPage>
@@ -78,7 +133,13 @@ const ChatDetails = () => {
             {users.map((user) => (
               <li
                 key={user.id}
-                className="flex items-center space-x-3 mb-3 cursor-pointer"
+                className="flex bg-teal-50 items-center space-x-3 mb-3 cursor-pointer"
+                style={{
+                  backgroundColor:
+                    user.id === selected?.id ? '#e4aec6' : '#eeeeee',
+                }}
+                onClick={() => setSelected(user)}
+                // P1
               >
                 <img
                   src={user.avatar}
@@ -102,26 +163,34 @@ const ChatDetails = () => {
               alt={currentUser.name}
               className="w-10 h-10 rounded-full mr-3"
             />
-            <h2 className="text-xl">{currentUser.name}</h2>
+            <h2 className="text-xl mr-5">{selected.name}</h2>
+            <h3 className="text-green-300 font-bold mr-5">{socketId}</h3>
+            <input
+              type="text"
+              // className="w-72 bg-inputinside outline-0 border-istroke border px-3 py-1 rounded-sm "
+              className=" bg-blue-200 shadow-md appearance-none focus:border-white hover:border-primary border-2 w-full px-3 py-3 text-black text-xl leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter Room ID"
+              value={roomId}
+              onChange={(e) => setRoomId(e.target.value)}
+            />{' '}
+            {/* p1 */}
           </header>
           <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
             {chatMessages.map((message) => (
               <div
                 key={message.id}
                 className={`mb-4 flex ${
-                  message.userId === currentUser.id
-                    ? 'justify-end'
-                    : 'justify-start'
+                  message.self ? 'justify-end' : 'justify-start'
                 }`}
               >
                 <div
                   className={`p-3 rounded-lg max-w-xs ${
-                    message.userId === currentUser.id
+                    message.self
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-200 text-gray-900'
                   }`}
                 >
-                  <p>{message.text}</p>
+                  <p>{message?.text}</p>
                   <p className="text-xs mt-2 text-right">{message.timestamp}</p>
                 </div>
               </div>
@@ -137,7 +206,7 @@ const ChatDetails = () => {
               placeholder="Type a message"
             />
             <button
-              onClick={handleSendMessage}
+              onClick={sendEvent}
               className="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-500"
             >
               Send

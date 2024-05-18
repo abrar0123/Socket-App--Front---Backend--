@@ -20,6 +20,12 @@ function Header() {
           <Link to="/Chat" className="hover:text-green-600 font-semibold">
             Chat
           </Link>
+          <Link
+            to="/ChatDetails"
+            className="hover:text-green-600 font-semibold"
+          >
+            User-Chat
+          </Link>
         </nav>
         <div className="flex items-center space-x-4">
           <button className="text-gray-600 hover:text-gray-900">Sign In</button>
