@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
   // ********* event 5 : send p1 to p2 msg  *********
 
   socket.on('send2', ({ room, msg }) => {
-    // console.log("send2 data : ", room);
+    console.log(room, 'send2 data Backend: ', msg);
     // io.to(room).emit("msgRec", msg); // both same
     socket.to(room).emit('msgRec', msg);
   });
