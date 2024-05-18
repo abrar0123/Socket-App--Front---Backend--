@@ -1,5 +1,3 @@
-import { Header } from '../../components';
-
 const Home = () => {
   return (
     <div>

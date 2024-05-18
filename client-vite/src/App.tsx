@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import './index.css';
-import { Home } from './pages';
-import { Header } from './components';
+import { LandingPage } from './components';
 
 function App() {
   const socket = useMemo(() => io('http://localhost:3000/'), []);
@@ -52,7 +51,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <LandingPage />
       <div className="flex justify-center flex-wrap gap-10 items-center mt-10">
         <div className="w-96 bg-gray-200 p-4 shadow-md">
           <h1 className="text-pink-500 text-2xl font-bold">
@@ -72,7 +71,7 @@ function App() {
               onChange={(e) => setmsg(e.target.value)}
             />
             <label className="block text-pink-500 text-[16px] my-2 ">
-              Rnter Room ID
+              Enter Room ID
             </label>
             <input
               type="text"

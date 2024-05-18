@@ -1,2 +1,2 @@
-import Header from './Navbar';
-export { Header };
+import LandingPage from './LandingPage';
+export { LandingPage };
