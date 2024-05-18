@@ -1,27 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
-import { io } from "socket.io-client";
-import "./index.css";
+import { useEffect, useMemo, useState } from 'react';
+import { io } from 'socket.io-client';
+import './index.css';
 
 function App() {
-  const socket = useMemo(() => io("http://localhost:3000/"), []);
-  const [msg, setmsg] = useState("");
+  const socket = useMemo(() => io('http://localhost:3000/'), []);
+  const [msg, setmsg] = useState('');
   const [receivedmsg, setreceivedmsg] = useState([]);
   const [socketId, setsocketId] = useState(null);
-  const [roomId, setRoomId] = useState("");
+  const [roomId, setRoomId] = useState('');
 
-  console.log("chat : msgrec ", receivedmsg);
+  console.log('chat : msgrec ', receivedmsg);
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("socket01 : connected run  ", socket.id);
+    socket.on('connect', () => {
+      console.log('socket01 : connected run  ', socket.id);
       setsocketId(socket.id);
     });
 
     // events name must be same at backend
-    socket.on("welcome", (s) => {
-      console.log("socket02 : ", s);
+    socket.on('welcome', (s) => {
+      console.log('socket02 : ', s);
     });
-    socket.on("welcome1", (s) => {
-      console.log("socket02 bradcast : ", s);
+    socket.on('welcome1', (s) => {
+      console.log('socket02 bradcast : ', s);
     });
     // socket.emit("message", "socket abrar");
     // when this component should removed, that function call
@@ -29,20 +29,20 @@ function App() {
     // return () => {
     // socket.disconnect();
     // };
-    socket.on("chat", (msg) => {
+    socket.on('chat', (msg) => {
       setreceivedmsg((prev) => [...prev, msg]);
     });
 
-    socket.on("msgRec", (msg) => {
-      console.log("chat2 : ", msg);
+    socket.on('msgRec', (msg) => {
+      console.log('chat2 : ', msg);
       setreceivedmsg((prev) => [...prev, msg]);
     });
   }, []);
 
   const msgSendHandler = () => {
     const data = { room: roomId, msg: msg };
-    socket.emit("send2", data);
-    setmsg("");
+    socket.emit('send2', data);
+    setmsg('');
   };
 
   return (

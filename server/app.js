@@ -7,10 +7,10 @@
 
 // const secretKeyJWT = "asdasdsadasdasdasdsa";
 
-const express = require("express");
-const { Server } = require("socket.io"); // Import Server from socket.io
-const http = require("http");
-const cors = require("cors");
+const express = require('express');
+const { Server } = require('socket.io'); // Import Server from socket.io
+const http = require('http');
+const cors = require('cors');
 
 const port = 3000;
 
@@ -19,8 +19,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
     credentials: true,
   },
 });
@@ -28,32 +28,32 @@ const io = new Server(server, {
 app.use(
   cors({
     // origin: "http://localhost:5173",
-    origin: "*",
-    methods: ["GET", "POST"],
+    origin: '*',
+    methods: ['GET', 'POST'],
     credentials: true,
-  })
+  }),
 );
 
 // middlware for cookies
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Hello, This is Socket app!");
+app.get('/', (req, res) => {
+  res.send('Hello, This is Socket app!');
 });
 
 // craetes socket at backend
 
 // after connect , 1st emit (send msg )
-io.on("connection", (socket) => {
+io.on('connection', (socket) => {
   // console.log("Socket User connected ", socket.id);
 
   // ********* event 1 : send msg to all user *********
-  socket.emit("welcome", `server socket msg at ID , ${socket.id}`);
+  socket.emit('welcome', `server socket msg at ID , ${socket.id}`);
 
   // ********* event 2 : send msg to all user excpt current user *********
   socket.broadcast.emit(
-    "welcome1",
-    `server socket broadcast at ID , ${socket.id}`
+    'welcome1',
+    `server socket broadcast at ID , ${socket.id}`,
   );
 
   // ********* event 3 : receive msg to any  user *********
@@ -63,15 +63,14 @@ io.on("connection", (socket) => {
 
   // ********* event 5 : send p1 to p2 msg  *********
 
-  socket.on("send2", ({ room, msg }) => {
+  socket.on('send2', ({ room, msg }) => {
     // console.log("send2 data : ", room);
     // io.to(room).emit("msgRec", msg); // both same
-    socket.to(room).emit("msgRec", msg);
+    socket.to(room).emit('msgRec', msg);
   });
-  
 
   // ********* event 4 : by default event for disconnect connectio *********
-  socket.on("disconnect", () => {
+  socket.on('disconnect', () => {
     // console.log("user disconnected ", socket.id);
   });
 });

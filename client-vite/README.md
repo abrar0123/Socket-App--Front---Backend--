@@ -6,6 +6,8 @@ redmi note 12
 
 ---
 
+<!-- npm run dev -->
+
 infinix not ui updates
 
 infnix 30 4g
