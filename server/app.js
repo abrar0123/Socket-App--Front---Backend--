@@ -11,6 +11,7 @@ const express = require('express');
 const { Server } = require('socket.io'); // Import Server from socket.io
 const http = require('http');
 const cors = require('cors');
+const uui = require('uuid');
 
 const port = 3000;
 
@@ -69,9 +70,32 @@ io.on('connection', (socket) => {
     socket.to(room).emit('msgRec', msg);
   });
 
-  // ********* event 4 : by default event for disconnect connectio *********
-  socket.on('disconnect', () => {
-    // console.log("user disconnected ", socket.id);
+  // socket.on('usersList', (v) => {
+  //   // console.log('usersList', v);
+  //   socket.emit('usersL', v);
+  // });
+
+  socket.on('register', (username, callback) => {
+    const userId = uuidv4();
+
+    console.log('uuid >>> ', userId, username);
+    users[userId] = { username, socketId: socket.id };
+    callback({ userId, username });
+    io.emit('userList', Object.values(users));
+  });
+
+  socket.on('connection', (socket) => {
+    console.log('Connect Soket : ', socket);
+
+    // socket.on('register', (username, callback) => {
+    //   // const userId = uuidv4();
+    //   users[userId] = { username, socketId: socket.id };
+    //   callback({ userId, username });
+    //   io.emit('userList', Object.values(users));
+    // });
+
+    // ********* event 4 : by default event for disconnect connectio *********
+    // j
   });
 });
 

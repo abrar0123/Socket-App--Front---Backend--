@@ -11,9 +11,9 @@ function ChatPage() {
 
   console.log('chat : msgrec ', receivedmsg);
   useEffect(() => {
-    socket.on('connect', () => {
+    socket.on('connection', () => {
       console.log('Connection : Build   ', socket.id);
-      setsocketId(socket.id);
+      // setsocketId(socket.id);
     });
 
     // events name must be same at backend

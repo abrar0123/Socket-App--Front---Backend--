@@ -74,7 +74,8 @@ const ChatDetails = () => {
   const [selected, setSelected] = useState([]);
   const socket = useMemo(() => io('http://localhost:3000/'), []);
   const [msg, setmsg] = useState('');
-  const [receivedmsg, setreceivedmsg] = useState([]);
+  const [usersList, setUsersList] = useState([]);
+
   const [socketId, setsocketId] = useState(null);
   const [roomId, setRoomId] = useState('');
 
@@ -91,17 +92,19 @@ const ChatDetails = () => {
   useEffect(() => {
     socket.on('connect', () => {
       console.log('Connection : Build   ', socket.id);
+      // socket.emit('usersList', socket.id);
       setsocketId(socket.id);
     });
 
-    socket.on('chat', (msg) => {
-      console.log('Backend msgRec Listener : ', msg);
+    // socket.on('chat', (msg) => {
+    //   console.log('Backend 1 : ', msg);
+    // });
 
-      setChatMessages((prev) => [...prev, msg]);
-    });
+    // socket.on('usersL', (data) => {
+    //   console.log('users >>> ', data);
+    // });
     socket.on('msgRec', (msg) => {
-      console.log('Backend msgRec Listener 1 : ', msg);
-
+      console.log('Backend msgRec Listener 2 : ', msg);
       setChatMessages((prev) => [...prev, msg]);
     });
   }, []);
