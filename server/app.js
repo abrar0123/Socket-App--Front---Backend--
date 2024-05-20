@@ -1,26 +1,22 @@
-// import { Server } from "socket.io";
-// import { createServer } from "http";
-// import cors from "cors";
-
-// import jwt from "jsonwebtoken";
-// import cookieParser from "cookie-parser";
-
-// const secretKeyJWT = "asdasdsadasdasdasdsa";
-
 const express = require('express');
 const { Server } = require('socket.io'); // Import Server from socket.io
 const http = require('http');
 const cors = require('cors');
-const uui = require('uuid');
-
-const port = 3000;
+const socketIo = require('socket.io');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const server = http.createServer(app);
+// const io = socketIo(server);
+
+const users = {};
+const rooms = {};
+
+const port = 5566;
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -42,60 +38,60 @@ app.get('/', (req, res) => {
   res.send('Hello, This is Socket app!');
 });
 
-// craetes socket at backend
-
-// after connect , 1st emit (send msg )
 io.on('connection', (socket) => {
-  // console.log("Socket User connected ", socket.id);
-
-  // ********* event 1 : send msg to all user *********
-  socket.emit('welcome', `server socket msg at ID , ${socket.id}`);
-
-  // ********* event 2 : send msg to all user excpt current user *********
-  socket.broadcast.emit(
-    'welcome1',
-    `server socket broadcast at ID , ${socket.id}`,
-  );
-
-  // ********* event 3 : receive msg to any  user *********
-  // socket.on("send", (e) => {
-  //   socket.broadcast.emit("chat", e);
-  // });
-
-  // ********* event 5 : send p1 to p2 msg  *********
-
-  socket.on('send2', ({ room, msg }) => {
-    console.log(room, 'send2 data Backend: ', msg);
-    // io.to(room).emit("msgRec", msg); // both same
-    socket.to(room).emit('msgRec', msg);
-  });
-
-  // socket.on('usersList', (v) => {
-  //   // console.log('usersList', v);
-  //   socket.emit('usersL', v);
-  // });
+  console.log('New client connected');
 
   socket.on('register', (username, callback) => {
     const userId = uuidv4();
-
-    console.log('uuid >>> ', userId, username);
     users[userId] = { username, socketId: socket.id };
     callback({ userId, username });
     io.emit('userList', Object.values(users));
   });
 
-  socket.on('connection', (socket) => {
-    console.log('Connect Soket : ', socket);
+  socket.on('createRoom', (userId, callback) => {
+    const roomId = uuidv4();
+    rooms[roomId] = { users: [userId] };
+    socket.join(roomId);
+    callback(roomId);
+  });
 
-    // socket.on('register', (username, callback) => {
-    //   // const userId = uuidv4();
-    //   users[userId] = { username, socketId: socket.id };
-    //   callback({ userId, username });
-    //   io.emit('userList', Object.values(users));
-    // });
+  socket.on('joinRoom', (roomId, userId, callback) => {
+    if (rooms[roomId]) {
+      socket.join(roomId);
+      rooms[roomId].users.push(userId);
+      callback({ success: true, roomId });
+      io.to(roomId).emit('userJoined', userId);
+    } else {
+      callback({ success: false, message: 'Room not found' });
+    }
+  });
 
-    // ********* event 4 : by default event for disconnect connectio *********
-    // j
+  socket.on('sendMessage', (roomId, message) => {
+    io.to(roomId).emit('receiveMessage', message);
+  });
+
+  // WebRTC signaling
+  socket.on('offer', (data) => {
+    io.to(data.target).emit('offer', data);
+  });
+
+  socket.on('answer', (data) => {
+    io.to(data.target).emit('answer', data);
+  });
+
+  socket.on('ice-candidate', (data) => {
+    io.to(data.target).emit('ice-candidate', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+    const userId = Object.keys(users).find(
+      (key) => users[key].socketId === socket.id,
+    );
+    if (userId) {
+      delete users[userId];
+      io.emit('userList', Object.values(users));
+    }
   });
 });
 

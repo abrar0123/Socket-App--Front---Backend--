@@ -35,40 +35,6 @@ const users = [
   },
 ];
 
-const messages = [
-  { id: 1, userId: 1, text: 'Hello, how are you?', timestamp: '10:00 AM' },
-  {
-    id: 2,
-    userId: 2,
-    text: 'I am good, thank you! How about you?',
-    timestamp: '10:01 AM',
-  },
-  {
-    id: 2,
-    userId: 2,
-    text: 'I am good, thank you! How about you?',
-    timestamp: '10:01 AM',
-  },
-  {
-    id: 2,
-    userId: 2,
-    text: 'I am good, thank you! How about you?',
-    timestamp: '10:01 AM',
-  },
-  {
-    id: 2,
-    userId: 2,
-    text: 'I am good, thank you! How about you?',
-    timestamp: '10:01 AM',
-  },
-  {
-    id: 3,
-    userId: 1,
-    text: 'I am doing well. What are you up to?',
-    timestamp: '10:02 AM',
-  },
-];
-
 const ChatDetails = () => {
   const [currentUser, setCurrentUser] = useState(users[1]);
   const [selected, setSelected] = useState([]);
