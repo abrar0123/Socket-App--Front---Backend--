@@ -11,8 +11,8 @@ function Header() {
           <Link to="/home" className="hover:text-green-600 font-semibold">
             Home
           </Link>
-          <Link to="/Services" className="hover:text-green-600 font-semibold">
-            Services
+          <Link to="/CkEditor" className="hover:text-green-600 font-semibold">
+            CkEditor
           </Link>
           <Link to="/Users" className="hover:text-green-600 font-semibold">
             Users
