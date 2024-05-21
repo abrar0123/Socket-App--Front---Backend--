@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { LandingPage } from '../../components';
 
 const users = [
@@ -34,12 +33,12 @@ const users = [
 ];
 
 const UsersPage = () => {
-  const [search, setSearch] = useState('');
-  const [selectedUser, setSelectedUser] = useState(null);
+  // const [search, setSearch] = useState('');
+  // const [selectedUser, setSelectedUser] = useState(null);
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  // const filteredUsers = users.filter((user) =>
+  //   user.name.toLowerCase().includes(search.toLowerCase()),
+  // );
 
   return (
     <LandingPage>

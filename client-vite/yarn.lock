@@ -492,7 +492,7 @@
     ckeditor5 "41.4.2"
     lodash-es "4.17.21"
 
-"@ckeditor/ckeditor5-editor-classic@41.4.2":
+"@ckeditor/ckeditor5-editor-classic@^41.4.2", "@ckeditor/ckeditor5-editor-classic@41.4.2":
   version "41.4.2"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-editor-classic/-/ckeditor5-editor-classic-41.4.2.tgz"
   integrity sha512-BVf4ipZz36eCTDFiQ8hqN+oBmuvZPzCmNDDjCYuHNGCKGLaIo1Yzi09fHPUWDw1U+en6Cgnwc2HSWgwf7zC7aA==
@@ -1412,6 +1412,11 @@ chokidar@^3.5.3:
     readdirp "~3.6.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+ckeditor5-custom-build@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.npmjs.org/ckeditor5-custom-build/-/ckeditor5-custom-build-0.0.6.tgz"
+  integrity sha512-CEFTaipvr8bv+xHexbziIImYRy2w3dx/hcvnc7iAVzUe2ZmOzUyZQ+ecYWaJJLCcehWXqZVgaWAaxcXl1+EO2A==
 
 ckeditor5@41.4.2:
   version "41.4.2"
